@@ -51,6 +51,9 @@ app.use("/Login", loginRouter);
 const getUserRouter = require("./routes/getUser");
 app.use("/getUser", getUserRouter);
 
+const postAdRouter = require("./routes/PostAd");
+app.use("/PostAd", postAdRouter);
+
 app.post("/logout", (req, res, next) => {
   res.clearCookie("connect.sid");
   req.logout(function (err) {

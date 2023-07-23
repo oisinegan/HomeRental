@@ -1,11 +1,9 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const { initializeApp } = require("firebase-admin/app");
+// const getStorage = require("../node_modules/firebase/storage");
+const { getStorage } = require("firebase-admin/storage");
+
 const firebaseConfig = {
   apiKey: "AIzaSyCe_gt78ziwC_Q3wjIU0eVOcZBNX49q1Zc",
   authDomain: "houserentalimages.firebaseapp.com",
@@ -18,4 +16,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const storage = getStorage(app);
+
+module.exports = storage;

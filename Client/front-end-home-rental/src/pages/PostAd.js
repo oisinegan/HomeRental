@@ -5,15 +5,15 @@ function PostAd() {
   const [file, setFile] = useState();
   const [userInfo, setUserInfo] = useState([{}]);
   const [formRes, setFormRes] = useState({
-    Type: "%",
-    City: "%",
-    County: "%",
-    MinPrice: "0",
-    MaxPrice: Number.MAX_SAFE_INTEGER,
-    MinBedrooms: "0",
-    MaxBedrooms: Number.MAX_SAFE_INTEGER,
-    MinBathrooms: "0",
-    MaxBathrooms: Number.MAX_SAFE_INTEGER,
+    Type: "",
+    file: "",
+    City: "",
+    County: "",
+    Address: "",
+    Price: "0",
+    Bedrooms: "0",
+    Bathrooms: "0",
+    UID: userInfo.id,
   });
 
   const handleChange = (e) => {
@@ -26,13 +26,28 @@ function PostAd() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    console.log(userInfo.id);
     console.log(formRes);
+    const response = await fetch("/PostAd", {
+      method: "post",
+      body: JSON.stringify(formRes),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(formRes);
+
+    const result = await response.json();
+    alert("MSG FROM BACKEND " + result);
+    console.log(result);
   };
 
   const handleChangeImage = (e) => {
     console.log(e.target.files);
+    formRes.file = URL.createObjectURL(e.target.files[0]);
     setFile(URL.createObjectURL(e.target.files[0]));
+    console.log(file);
+    console.log(formRes);
   };
 
   useEffect(() => {
@@ -42,6 +57,8 @@ function PostAd() {
         setUserInfo(userInfo);
         console.log("Test");
         console.log(userInfo);
+        formRes.UID = userInfo.id;
+        console.log(formRes);
       });
   }, []);
 
@@ -74,6 +91,20 @@ function PostAd() {
           House
         </label>
         <br /> <br />
+        <label>Add Image:</label>
+        <input name="file" type="file" required onChange={handleChangeImage} />
+        <img height={150} width={150} src={file} />
+        <br /> <br />
+        <br /> <br />
+        <label>Address</label>
+        <input
+          name="Address"
+          type="text"
+          maxLength={30}
+          required
+          onChange={handleChange}
+        />
+        <br /> <br />
         <label>Town</label>
         <input
           name="City"
@@ -82,10 +113,6 @@ function PostAd() {
           required
           onChange={handleChange}
         />
-        <br /> <br />
-        <label>Add Image:</label>
-        <input type="file" onChange={handleChangeImage} />
-        <img height={150} width={150} src={file} />
         <br /> <br />
         <label>County</label>
         <input
@@ -96,39 +123,15 @@ function PostAd() {
           onChange={handleChange}
         />
         <br /> <br />
-        <label>Min Price</label>
-        <input name="MinPrice" type="number" required onChange={handleChange} />
+        <label>Price per Month</label>
+        <input name="Price" type="number" required onChange={handleChange} />
         <br /> <br />
-        <label>Max Price</label>
-        <input name="MaxPrice" type="number" required onChange={handleChange} />
+        <label>Bedrooms</label>
+        <input name="Bedrooms" type="number" required onChange={handleChange} />
         <br /> <br />
-        <label>Min Bedrooms</label>
+        <label>Bathrooms</label>
         <input
-          name="MinBedrooms"
-          type="number"
-          required
-          onChange={handleChange}
-        />
-        <br /> <br />
-        <label>Max Bedrooms</label>
-        <input
-          name="MaxBedrooms"
-          type="number"
-          required
-          onChange={handleChange}
-        />
-        <br /> <br />
-        <label>Min Bathrooms</label>
-        <input
-          name="MinBathrooms"
-          type="number"
-          required
-          onChange={handleChange}
-        />
-        <br /> <br />
-        <label>Max Bathrooms</label>
-        <input
-          name="MaxBathrooms"
+          name="Bathrooms"
           type="number"
           required
           onChange={handleChange}
