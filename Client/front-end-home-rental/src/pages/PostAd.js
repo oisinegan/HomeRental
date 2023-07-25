@@ -1,19 +1,23 @@
 import Nav from "../components/nav";
 import React, { useState, useEffect } from "react";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+import storage from "../config/firebase";
 
 function PostAd() {
+  const [image, setImage] = useState(null);
+  const [imagePre, setImagePre] = useState(null);
   const [file, setFile] = useState();
+  const [imagePreview, setImagePreview] = useState();
   const [userInfo, setUserInfo] = useState([{}]);
   const [formRes, setFormRes] = useState({
     Type: "",
-    file: "",
     City: "",
     County: "",
     Address: "",
     Price: "0",
     Bedrooms: "0",
     Bathrooms: "0",
-    UID: userInfo.id,
+    UID: "",
   });
 
   const handleChange = (e) => {
@@ -26,16 +30,25 @@ function PostAd() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(userInfo.id);
-    console.log(formRes);
+
+    let formData = new FormData();
+    formData.append("Type", formRes.Type);
+    formData.append("City", formRes.City);
+    formData.append("County", formRes.County);
+    formData.append("Address", formRes.Address);
+    formData.append("Price", formRes.Price);
+    formData.append("Bedrooms", formRes.Bedrooms);
+    formData.append("Bathrooms", formRes.Bathrooms);
+    formData.append("UID", formRes.UID);
+
+    for (const pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+
     const response = await fetch("/PostAd", {
       method: "post",
-      body: JSON.stringify(formRes),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      body: formData,
     });
-    console.log(formRes);
 
     const result = await response.json();
     alert("MSG FROM BACKEND " + result);
@@ -43,11 +56,43 @@ function PostAd() {
   };
 
   const handleChangeImage = (e) => {
-    console.log(e.target.files);
-    formRes.file = URL.createObjectURL(e.target.files[0]);
-    setFile(URL.createObjectURL(e.target.files[0]));
-    console.log(file);
-    console.log(formRes);
+    let date_ob = new Date();
+    let date = ("0" + date_ob.getDate()).slice(-2);
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+    let year = date_ob.getFullYear();
+    let hours = date_ob.getHours();
+    let minutes = date_ob.getMinutes();
+    let seconds = date_ob.getSeconds();
+    let milli = date_ob.getMilliseconds();
+
+    let fullDate =
+      hours +
+      ":" +
+      minutes +
+      ":" +
+      seconds +
+      ":" +
+      milli +
+      "__" +
+      date +
+      "-" +
+      month +
+      "-" +
+      year;
+    console.log(fullDate);
+
+    const folder = formRes.UID + "_" + fullDate;
+
+    console.log(folder);
+    const imageRef = ref(storage, folder);
+
+    setImage(e.target.files[0]);
+    setImagePre(URL.createObjectURL(image));
+    console.log(image);
+
+    // uploadBytes(imageRef, image).then((snapshot) => {
+    //   console.log("Uploaded a blob or file!");
+    // });
   };
 
   useEffect(() => {
@@ -55,10 +100,10 @@ function PostAd() {
       .then((res) => res.json())
       .then((userInfo) => {
         setUserInfo(userInfo);
-        console.log("Test");
-        console.log(userInfo);
-        formRes.UID = userInfo.id;
-        console.log(formRes);
+        setFormRes((prevFormRes) => ({
+          ...prevFormRes,
+          UID: userInfo.id,
+        }));
       });
   }, []);
 
@@ -67,7 +112,7 @@ function PostAd() {
       <Nav />
 
       <h1>Hello {userInfo.Name} Post a property</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <label>Property Type</label>
         <br />
         <label>
@@ -93,7 +138,7 @@ function PostAd() {
         <br /> <br />
         <label>Add Image:</label>
         <input name="file" type="file" required onChange={handleChangeImage} />
-        <img height={150} width={150} src={file} />
+        <img height={150} width={150} src={imagePre} />
         <br /> <br />
         <br /> <br />
         <label>Address</label>

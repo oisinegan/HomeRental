@@ -8,32 +8,43 @@ const { initializeApp } = require("firebase-admin/app");
 // const getStorage = require("../node_modules/firebase/storage");
 const { getStorage } = require("firebase-admin/storage");
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCe_gt78ziwC_Q3wjIU0eVOcZBNX49q1Zc",
-  authDomain: "houserentalimages.firebaseapp.com",
-  projectId: "houserentalimages",
-  storageBucket: "houserentalimages.appspot.com",
-  messagingSenderId: "872853039263",
-  appId: "1:872853039263:web:acc0bc3eed092d069a1aaa",
-  measurementId: "G-QXTW4JWRNV",
-};
+// const firebaseConfig = {
+//   apiKey: "AIzaSyCe_gt78ziwC_Q3wjIU0eVOcZBNX49q1Zc",
+//   authDomain: "houserentalimages.firebaseapp.com",
+//   projectId: "houserentalimages",
+//   storageBucket: "houserentalimages.appspot.com",
+//   messagingSenderId: "872853039263",
+//   appId: "1:872853039263:web:acc0bc3eed092d069a1aaa",
+//   measurementId: "G-QXTW4JWRNV",
+// };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// const storage = getStorage(app);
 
 //--------------------------------------------------------------------------------------------
 const admin = require("firebase-admin");
-const serviceAccount = require("./path/to/your/serviceAccountKey.json");
+const serviceAccount = require("../houserentalimages-firebase-adminsdk-jyge2-eaaf09321a.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: "your-firebase-storage-bucket-url.appspot.com",
+  storageBucket: "houserentalimages.appspot.com",
 });
 
 const bucket = admin.storage().bucket();
 
 //--------------------------------------------------------------------------------------------
+async function uploadFile(filePath, destinationPath) {
+  try {
+    await bucket.upload(filePath, {
+      destination: destinationPath,
+    });
+    console.log("File uploaded successfully.");
+  } catch (error) {
+    console.error("Error uploading file:", error);
+  }
+}
+
 router.post("/", (req, res) => {
   connection.connect();
 
@@ -66,9 +77,9 @@ router.post("/", (req, res) => {
     year;
   console.log(fullDate);
 
-  const folder = info.UID + "_" + fullDate;
-  console.log(folder);
-  const imageRef = ref(storage, folder);
+
+
+  // const imageRef = ref(storage, folder);
   // uploadBytes(imageRef, info.file).then(() => {
   //   console.log("IMAGE UPLOADED");
   // });
@@ -111,7 +122,7 @@ router.post("/", (req, res) => {
   //   if (err) throw err;
 
   //   res.send(rows);
-  // });
+  //  });
 });
 
 module.exports = router;
