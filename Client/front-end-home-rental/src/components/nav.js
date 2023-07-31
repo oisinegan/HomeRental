@@ -21,26 +21,31 @@ function Nav() {
   };
 
   return (
-    <nav>
-      {context === "undefined" ? (
-        <li>
-          <Link to="/Login">Login</Link>
-          <Link to="/Register">Register</Link>{" "}
-        </li>
-      ) : (
-        <li>
-          <Link to="/PostAd">Post a rental property</Link>
-          <Link onClick={logout}>Log out</Link>
-        </li>
-      )}
-
-      <>
-        <Link to="/">ShowAll</Link>
-
-        <Link to="/Filter">Filter</Link>
-
-        <Link to="/Search">Search</Link>
-      </>
+    <nav className="shadow bg-white">
+      <div className="h-16 mx-auto px-5 flex items-center justify-between">
+        <p className="text-2xl hover:text-cyan-500 transition-colors cursor-pointer">
+          HomeRental.
+        </p>
+        {context === "undefined" ? (
+          <ul className="flex items-center gap-5">
+            <li className="hover:text-cyan-500 transition-colors">
+              <Link to="/Login">List Property</Link>
+            </li>
+            <li className="hover:text-cyan-500 transition-colors">
+              <Link to="/Login">Login</Link>{" "}
+            </li>
+          </ul>
+        ) : (
+          <ul className="flex items-center gap-5">
+            <li className="hover:text-cyan-500 transition-colors">
+              <Link to="/PostAd">List Property</Link>
+            </li>
+            <li className="hover:text-cyan-500 transition-colors">
+              <Link onClick={logout}>Log out</Link>
+            </li>
+          </ul>
+        )}
+      </div>
     </nav>
   );
 }

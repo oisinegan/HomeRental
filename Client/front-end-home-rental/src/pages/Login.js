@@ -3,7 +3,6 @@ import Nav from "../components/nav";
 
 function Login() {
   const [info, setInfo] = useState([{}]);
-  const [serverRes, setServerRes] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -4,9 +4,6 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import storage from "../config/firebase";
 
 function PostAd() {
-  const [images, setImages] = useState(null);
-  const [imagePre, setImagePre] = useState(null);
-
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploadedFilesImgURl, setUploadedFilesImgUrl] = useState([]);
   const [fileLimit, setFileLimit] = useState(false);
@@ -22,7 +19,7 @@ function PostAd() {
     Bedrooms: "0",
     Bathrooms: "0",
     idLandlord: "",
-    url: "",
+    urls: "",
     DatePosted: "",
     Folder: "",
   });
@@ -66,21 +63,18 @@ function PostAd() {
     formRes.Folder = folder;
     formRes.DatePosted = date + "-" + month + "-" + year;
 
-    console.log(uploadedFiles);
-    const promise = [];
-    uploadedFiles.map(async (img) => {
+    const fbUrls = [];
+    const uploadPromises = uploadedFiles.map(async (img) => {
       const imageRef = ref(storage, folder + "/" + img.name);
       await uploadBytes(imageRef, img);
       const imageUrl = await getDownloadURL(imageRef);
-      console.log(imageUrl);
-      //formRes.url = imageUrl
-    });
-    // const imageRef = ref(storage, folder + "/" + images.name);
 
-    //
-    // const imageUrl = await getDownloadURL(imageRef);
-    // formRes.url = imageUrl;
-    // await sendForm();
+      fbUrls.push(imageUrl);
+    });
+    formRes.urls = fbUrls;
+    await Promise.all(uploadPromises);
+
+    await sendForm();
   };
 
   const sendForm = async () => {
@@ -92,17 +86,14 @@ function PostAd() {
       },
     });
     const result = await response.json();
-    alert("MSG FROM BACKEND " + result);
+
+    if (result === "RECIEVED") {
+      window.location.href = "http://localhost:3000";
+    } else {
+      alert("ERROR POSTING AD PLEASE TRY AGAIN");
+    }
   };
 
-  // const handleChangeImage = (e) => {
-  //   // setImages(e.target.files[0]);
-  //   // const urlVal = URL.createObjectURL(e.target.files[0]);
-  //   // setImagePre(urlVal);
-
-  //   console.log(e.target.files);
-  // };
-  //CREATE OBJECT URLs
   const configImages = async (files) => {
     const urls = [];
     for (let i = 0; i < files.length; i++) {
@@ -111,8 +102,6 @@ function PostAd() {
       urls.push(objectURL);
     }
     setUploadedFilesImgUrl(urls);
-    console.log(uploadedFilesImgURl);
-    console.log(urls);
   };
   const handleUploadFiles = (files) => {
     const uploaded = [...uploadedFiles];
@@ -128,6 +117,7 @@ function PostAd() {
           return true;
         }
       }
+      return false;
     });
     if (!limitExceeded) {
       setUploadedFiles(uploaded);
@@ -144,7 +134,7 @@ function PostAd() {
       .then((res) => res.json())
       .then((userInfo) => {
         setUserInfo(userInfo);
-        console.log(userInfo);
+
         setFormRes((prevFormRes) => ({
           ...prevFormRes,
           idLandlord: userInfo.id,
@@ -194,7 +184,12 @@ function PostAd() {
         <div className="uploaded-files-list">
           {uploadedFilesImgURl.map((file) => (
             <div>
-              <img height={150} width={150} src={file} />
+              <img
+                height={150}
+                alt="House rental images"
+                width={150}
+                src={file}
+              />
             </div>
           ))}
         </div>

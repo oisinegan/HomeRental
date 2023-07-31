@@ -2,30 +2,38 @@ import { useState, useEffect } from "react";
 import Nav from "../components/nav";
 
 function ShowAll() {
-  const [dataHouse, setDataHouse] = useState([{}]);
+  const [dataHouse, setDataHouse] = useState({});
 
   useEffect(() => {
     fetch("/getAllHomes")
       .then((res) => res.json())
       .then((dataHouse) => {
         setDataHouse(dataHouse);
+        console.log(dataHouse);
       });
   }, []);
 
   return (
     <>
       <Nav />
-      <h1>Show All</h1>
+      <h1 className="text-3xl font-bold underline">Show all</h1>
       <div>
-        {typeof dataHouse[0].City === "undefined" ? (
+        {dataHouse.length === 0 ? (
           <p>loading....</p>
         ) : (
           <div>
-            {dataHouse.map((house, index) => (
+            {Object.entries(dataHouse).map(([index, house]) => (
               <div key={index}>
                 <div>
-                  <img src={house.url} width={100} height={100}></img>
-                  {house.idHome +
+                  {house.urls.map((images, index) => (
+                    <img
+                      src={images}
+                      alt="Rental property images"
+                      width={100}
+                      height={100}
+                    ></img>
+                  ))}
+                  {index +
                     "," +
                     house.Type +
                     "," +
@@ -41,9 +49,9 @@ function ShowAll() {
                     "," +
                     house.Bathrooms +
                     ", POSTED BY: " +
-                    house.name +
+                    house.Name +
                     ", DATE POSTED: " +
-                    house.DatePosted.slice(0, 10)}
+                    house.DatePosted}
                 </div>
               </div>
             ))}

@@ -1,10 +1,8 @@
 import Nav from "../components/nav";
 import React, { useState } from "react";
-import { redirect } from "react-router-dom";
 
 function Register() {
   const [info, setInfo] = useState([{}]);
-  const [serverRes, setServerRes] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -2,7 +2,7 @@ import Nav from "../components/nav";
 import React, { useState } from "react";
 
 function Filter() {
-  const [searchRes, setSearchRes] = useState([{}]);
+  const [searchRes, setSearchRes] = useState({});
   const [filterRes, setFilterRes] = useState({
     Type: "%",
     City: "%",
@@ -35,7 +35,10 @@ function Filter() {
     });
 
     const result = await response.json();
+
     setSearchRes(result);
+    console.log(result);
+    console.log(searchRes);
   };
 
   return (
@@ -100,15 +103,22 @@ function Filter() {
         <button type="submit">Submit</button>
       </form>
       <div>
-        {typeof searchRes === "undefined" ? (
+        {Object.keys(searchRes).length === 0 ? (
           <p>loading....</p>
         ) : (
           <div>
-            {searchRes.map((house, index) => (
+            {Object.entries(searchRes).map(([index, house]) => (
               <div key={index}>
                 <div>
-                <img src={house.url} width={100} height={100}></img>
-                  {house.idHome +
+                  {house.urls.map((images, index) => (
+                    <img
+                      src={images}
+                      alt="Rental property images"
+                      width={100}
+                      height={100}
+                    ></img>
+                  ))}
+                  {index +
                     "," +
                     house.Type +
                     "," +
@@ -122,7 +132,11 @@ function Filter() {
                     "," +
                     house.Bedrooms +
                     "," +
-                    house.Bathrooms}
+                    house.Bathrooms +
+                    ", POSTED BY: " +
+                    house.Name +
+                    ", DATE POSTED: " +
+                    house.DatePosted}
                 </div>
               </div>
             ))}

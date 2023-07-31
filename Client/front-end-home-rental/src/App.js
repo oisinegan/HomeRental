@@ -7,15 +7,16 @@ import PostAd from "./pages/PostAd";
 import Login from "./pages/Login";
 
 import Register from "./pages/Register";
-import Context from "./pages/Context";
 import { myContext } from "./pages/Context";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   const context = useContext(myContext);
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={<ShowAll />} />
+        <Route index element={<LandingPage />} />
+        <Route path="ShowAll" element={<ShowAll />} />
         <Route path="Filter" element={<Filter />} />
         <Route path="Search" element={<Search />} />
 

@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Nav from "../components/nav";
 function Search() {
   const [search, setSearch] = useState([]);
-  const [searchRes, setSearchRes] = useState([{}]);
+  const [searchRes, setSearchRes] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,7 +15,6 @@ function Search() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
     const response = await fetch("/searchHomes", {
       method: "post",
       body: JSON.stringify(search),
@@ -26,7 +25,6 @@ function Search() {
 
     const result = await response.json();
     setSearchRes(result);
-  
   };
 
   return (
@@ -46,15 +44,22 @@ function Search() {
       </form>
 
       <div>
-        {typeof searchRes === "undefined" ? (
-          <p>Search results display here!</p>
+        {Object.keys(searchRes).length === 0 ? (
+          <p>loading....</p>
         ) : (
           <div>
-            {searchRes.map((house, index) => (
+            {Object.entries(searchRes).map(([index, house]) => (
               <div key={index}>
-                <img src={house.url} width={100} height={100}></img>
                 <div>
-                  {house.idHome +
+                  {house.urls.map((images, index) => (
+                    <img
+                      src={images}
+                      alt="House rental images"
+                      width={100}
+                      height={100}
+                    ></img>
+                  ))}
+                  {index +
                     "," +
                     house.Type +
                     "," +
@@ -68,7 +73,11 @@ function Search() {
                     "," +
                     house.Bedrooms +
                     "," +
-                    house.Bathrooms}
+                    house.Bathrooms +
+                    ", POSTED BY: " +
+                    house.Name +
+                    ", DATE POSTED: " +
+                    house.DatePosted}
                 </div>
               </div>
             ))}
