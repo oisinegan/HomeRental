@@ -61,6 +61,9 @@ router.post("/", (req, res) => {
     " AND Type LIKE '" +
     info.Type +
     "%'";
+
+  console.log("SQL REQ");
+  console.log(sql);
   connection.query(sql, (err, rows, fields) => {
     if (err) throw err;
     console.log(rows);

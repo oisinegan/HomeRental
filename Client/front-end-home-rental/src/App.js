@@ -5,6 +5,9 @@ import Filter from "./pages/Filter";
 import Search from "./pages/Search";
 import PostAd from "./pages/PostAd";
 import Login from "./pages/Login";
+import Property from "./pages/Property";
+import MyRentals from "./pages/MyRentals";
+import DeleteAccount from "./pages/deleteAccount";
 
 import Register from "./pages/Register";
 import { myContext } from "./pages/Context";
@@ -16,9 +19,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route index element={<LandingPage />} />
-        <Route path="ShowAll" element={<ShowAll />} />
+        <Route path="Rentals" element={<ShowAll />} />
         <Route path="Filter" element={<Filter />} />
         <Route path="Search" element={<Search />} />
+        <Route path="Property" element={<Property />} />
 
         {context === "undefined" ? (
           <>
@@ -28,6 +32,8 @@ function App() {
         ) : (
           <>
             <Route path="PostAd" element={<PostAd />} />
+            <Route path="MyRentals" element={<MyRentals />} />
+            <Route path="DeleteAccount" element={<DeleteAccount />} />
           </>
         )}
       </Routes>

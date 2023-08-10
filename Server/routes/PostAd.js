@@ -6,7 +6,7 @@ router.post("/", (req, res) => {
   connection.connect();
 
   let info = req.body;
-  // console.log(info);
+  console.log(info);
   // res.send('"RECEIVED"');
 
   for (var i = 0; i < info.urls.length; i++) {
@@ -14,7 +14,7 @@ router.post("/", (req, res) => {
   }
 
   const sql =
-    "INSERT INTO `HomeRental`.`Home` (`Type`, `Address`, `City`, `County`, `Price`, `Bedrooms`, `Bathrooms`, `idLandlord`, `DatePosted`,`Folder`) VALUES ('" +
+    "INSERT INTO `HomeRental`.`Home` (`Type`, `Address`, `City`, `County`, `Price`, `Bedrooms`, `Bathrooms`, `idLandlord`, `DatePosted`,`Folder`,`Description`) VALUES ('" +
     info.Type +
     "', '" +
     info.Address +
@@ -34,8 +34,9 @@ router.post("/", (req, res) => {
     info.DatePosted +
     "', '" +
     info.Folder +
-    "'); ";
-
+    "', '" +
+    info.Description +
+    "')";
   connection.query(sql, (err, rows, fields) => {
     if (err) throw err;
     console.log(rows);

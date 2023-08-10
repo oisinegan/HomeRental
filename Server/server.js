@@ -54,6 +54,18 @@ app.use("/getUser", getUserRouter);
 const postAdRouter = require("./routes/PostAd");
 app.use("/PostAd", postAdRouter);
 
+const getPropertyRouter = require("./routes/getProperty");
+app.use("/getProperty", getPropertyRouter);
+
+const getRentalsRouter = require("./routes/getRentals");
+app.use("/getRentals", getRentalsRouter);
+
+const deletePropertyRouter = require("./routes/deleteProperty");
+app.use("/deleteProperty", deletePropertyRouter);
+
+const deleteAccountRouter = require("./routes/deleteAccount");
+app.use("/deleteAccount", deleteAccountRouter);
+
 app.post("/logout", (req, res, next) => {
   res.clearCookie("connect.sid");
   req.logout(function (err) {

@@ -3,25 +3,17 @@ const router = express.Router();
 const connection = require("../config/dbConfig");
 
 router.post("/", (req, res) => {
-  console.log("CALLED SEARCH HOMES");
-
   connection.connect();
+
   let info = req.body;
-  console.log("RECICED: ");
   console.log(info);
 
-  console.log("SQL>>>>>>>");
   const sql =
-    "SELECT Home.*, Urls.*, Landlord.Name FROM Home INNER JOIN URLs ON Home.idHome = Urls.idHome INNER JOIN landlord ON Home.idLandlord = Landlord.idLandlord WHERE Address LIKE '" +
-    info.search +
-    "%' OR City LIKE '" +
-    info.search +
-    "%'  OR County LIKE '" +
-    info.search +
-    "%' ";
+    "SELECT Home.*, Urls.*, Landlord.Name FROM Home INNER JOIN URLs ON Home.idHome = Urls.idHome INNER JOIN landlord ON Home.idLandlord = Landlord.idLandlord WHERE Home.idLandlord =" +
+    info.id;
 
+  console.log("SQL REQ");
   console.log(sql);
-
   connection.query(sql, (err, rows, fields) => {
     if (err) throw err;
     console.log(rows);

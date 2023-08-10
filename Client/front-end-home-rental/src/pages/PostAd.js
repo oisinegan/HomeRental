@@ -1,4 +1,5 @@
 import Nav from "../components/nav";
+import Footer from "../components/footer";
 import React, { useState, useEffect } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import storage from "../config/firebase";
@@ -7,17 +8,18 @@ function PostAd() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploadedFilesImgURl, setUploadedFilesImgUrl] = useState([]);
   const [fileLimit, setFileLimit] = useState(false);
-  const MAX_IMAGES = 4;
+  const MAX_IMAGES = 6;
 
   const [userInfo, setUserInfo] = useState([{}]);
   const [formRes, setFormRes] = useState({
-    Type: "",
+    Type: "apartment",
     City: "",
     County: "",
     Address: "",
     Price: "0",
     Bedrooms: "0",
     Bathrooms: "0",
+    Description: "",
     idLandlord: "",
     urls: "",
     DatePosted: "",
@@ -88,7 +90,7 @@ function PostAd() {
     const result = await response.json();
 
     if (result === "RECIEVED") {
-      window.location.href = "http://localhost:3000";
+      window.location.href = "http://localhost:3000/MyRentals";
     } else {
       alert("ERROR POSTING AD PLEASE TRY AGAIN");
     }
@@ -124,10 +126,19 @@ function PostAd() {
       configImages(uploaded);
     }
   };
+
   const handleFileEvent = (e) => {
     const chosenFiles = Array.prototype.slice.call(e.target.files);
     handleUploadFiles(chosenFiles);
   };
+
+  const deleteImage = () => {
+    console.log("Deleting");
+    setUploadedFiles([]);
+    setUploadedFilesImgUrl([]);
+  };
+
+  useEffect(() => {}, [uploadedFiles]);
 
   useEffect(() => {
     fetch("/getUser")
@@ -145,99 +156,212 @@ function PostAd() {
   return (
     <>
       <Nav />
-
-      <h1>Hello {userInfo.Name} Post a property</h1>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <label>Property Type</label>
-        <br />
-        <label>
-          <input
-            type="radio"
-            name="Type"
-            value="apartment"
-            required
+      <h1 className="mb-12 ml-16 text-4xl font-extrabold leading-none tracking-tight text-cyan-900 md:text-4xl lg:text-5xl dark:text-white mt-8 ml-10">
+        <span className=" underline-offset-3 decoration-12 decoration-black dark:decoration-blue-600">
+          List Property
+        </span>
+      </h1>
+      <h1> </h1>
+      <form
+        className="mx-[20%]"
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+      >
+        <div class="mb-6">
+          <label className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">
+            Property Type
+          </label>
+          <select
+            id="countries"
             onChange={handleChange}
-          />
-          Apartment
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="Type"
-            value="house"
-            required
-            onChange={handleChange}
-          />
-          House
-        </label>
-        <br /> <br />
-        <label>Add Image:</label>
-        <input
-          name="file"
-          type="file"
-          required
-          onChange={handleFileEvent}
-          multiple
-          disabled={fileLimit}
-        />
-        {/* <img height={150} width={150} src={imagePre} /> */}
-        <div className="uploaded-files-list">
-          {uploadedFilesImgURl.map((file) => (
-            <div>
-              <img
-                height={150}
-                alt="House rental images"
-                width={150}
-                src={file}
-              />
-            </div>
-          ))}
+            class="bg-gray-50 border border-gray-300  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+            <option value="apartment">Apartment</option>
+            <option value="house">House</option>
+          </select>
         </div>
-        <br /> <br />
-        <br /> <br />
-        <label>Address</label>
-        <input
-          name="Address"
-          type="text"
-          maxLength={30}
-          required
-          onChange={handleChange}
-        />
-        <br /> <br />
-        <label>Town</label>
-        <input
-          name="City"
-          type="text"
-          maxLength={30}
-          required
-          onChange={handleChange}
-        />
-        <br /> <br />
-        <label>County</label>
-        <input
-          name="County"
-          type="text"
-          maxLength={30}
-          required
-          onChange={handleChange}
-        />
-        <br /> <br />
-        <label>Price per Month</label>
-        <input name="Price" type="number" required onChange={handleChange} />
-        <br /> <br />
-        <label>Bedrooms</label>
-        <input name="Bedrooms" type="number" required onChange={handleChange} />
-        <br /> <br />
-        <label>Bathrooms</label>
-        <input
-          name="Bathrooms"
-          type="number"
-          required
-          onChange={handleChange}
-        />
-        <br /> <br />
-        <button type="submit">Submit</button>
+
+        <div class="mb-6">
+          <label
+            for="email"
+            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+          >
+            Address
+          </label>
+          <input
+            name="Address"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            type="text"
+            maxLength={30}
+            required
+            onChange={handleChange}
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            for="email"
+            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+          >
+            Town
+          </label>
+          <input
+            name="City"
+            type="text"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            maxLength={30}
+            required
+            onChange={handleChange}
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            for="email"
+            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+          >
+            County
+          </label>
+          <input
+            name="County"
+            type="text"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            maxLength={30}
+            required
+            onChange={handleChange}
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            for="email"
+            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+          >
+            Price per month
+          </label>
+          <input
+            name="Price"
+            type="number"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required
+            onChange={handleChange}
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            for="email"
+            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+          >
+            Bed
+          </label>
+          <input
+            name="Bedrooms"
+            type="number"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required
+            onChange={handleChange}
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            for="email"
+            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+          >
+            Bed
+          </label>
+          <input
+            name="Bedrooms"
+            type="number"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required
+            onChange={handleChange}
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            for="email"
+            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+          >
+            Bathrooms
+          </label>
+          <input
+            name="Bathrooms"
+            type="number"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required
+            onChange={handleChange}
+          />
+        </div>
+
+        <div class="mb-6">
+          <label
+            for="Description"
+            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+          >
+            Description
+          </label>
+          <textarea
+            name="Description"
+            rows="6"
+            maxLength={2000}
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required
+            onChange={handleChange}
+          />
+        </div>
+
+        <div class="mb-6 flex flex-col justify-center">
+          <label
+            for="images"
+            class="block mb-1 text-lg font-medium text-gray-900 dark:text-white"
+          >
+            {" "}
+            Choose Images{" "}
+          </label>
+
+          <input
+            name="file"
+            type="file"
+            required
+            onChange={handleFileEvent}
+            multiple
+            disabled={fileLimit}
+            className="hidden-input"
+          />
+          {/* <a
+            href="/Register"
+            className="font-semibold leading-6 text-cyan-600 hover:text-cyan-500"
+          >
+            Sign up now
+          </a> */}
+
+          {/* <img height={150} width={150} src={imagePre} /> */}
+          <div className="uploaded-files-list mx-[20%] ">
+            {uploadedFilesImgURl.map((file) => (
+              <div>
+                <img
+                  className="h-[25em] w-full my-4 border-2 border-black"
+                  alt="House rental images"
+                  src={file}
+                />
+              </div>
+            ))}
+          </div>
+          <a
+            className="font-semibold leading-6 text-cyan-600 hover:text-cyan-500"
+            onClick={deleteImage}
+          >
+            Not Happy with your images? Click here to reset!
+          </a>
+        </div>
+
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium rounded-md justify-end"
+          >
+            Post Property
+          </button>
+        </div>
       </form>
+      <Footer />
     </>
   );
 }
