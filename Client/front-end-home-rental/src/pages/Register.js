@@ -1,6 +1,6 @@
 import Nav from "../components/nav";
 import React, { useState } from "react";
-import logo from "../Images/Logo.png"
+import logo from "../Images/Logo.png";
 
 function Register() {
   const [info, setInfo] = useState([{}]);
@@ -15,7 +15,6 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(info);
 
     const response = await fetch("/Register", {
       method: "post",
@@ -35,8 +34,8 @@ function Register() {
   return (
     <>
       <Nav />
-     <div className="flex h-screen bg-[#fafaf9] flex-1 flex-col justify-center  px-6 py-12 lg:px-8 ">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm rounded-full">
+      <div className="flex h-screen bg-[#fafaf9] flex-1 flex-col justify-center  px-6 py-12 lg:px-8 ">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm rounded-full">
           <div className="rounded-lg">
             <img
               className="mx-auto rounded-full h-100 w-auto"
@@ -50,8 +49,8 @@ function Register() {
           </h2>
         </div>
         <div className="mt-10 mx-4 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form onSubmit={handleSubmit}>
-        <div>
+          <form onSubmit={handleSubmit}>
+            <div>
               <label
                 htmlFor="name"
                 className="block text-sm font-medium leading-6 text-gray-900"
@@ -59,10 +58,17 @@ function Register() {
                 Name
               </label>
               <div className="mt-2">
-        <input name="Name" type="text" required onChange={handleChange}  className="block w-full rounded-md border-0 pl-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" /> 
-          </div></div>
-        <br /> <br />
-         <div>
+                <input
+                  name="Name"
+                  type="text"
+                  required
+                  onChange={handleChange}
+                  className="block w-full rounded-md border-0 pl-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <br /> <br />
+            <div>
               <label
                 htmlFor="email"
                 className="block text-sm font-medium leading-6 text-gray-900"
@@ -70,15 +76,19 @@ function Register() {
                 Email address
               </label>
               <div className="mt-2">
-        <input name="username"  id="email"
+                <input
+                  name="username"
+                  id="email"
                   type="email"
                   onChange={handleChange}
                   autoComplete="email"
                   required
-                  className="block w-full rounded-md border-0 pl-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-        </div></div>
-        <br /> <br />
-       <div>
+                  className="block w-full rounded-md border-0 pl-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <br /> <br />
+            <div>
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="pass"
@@ -86,21 +96,21 @@ function Register() {
                 >
                   Password
                 </label>
-               
               </div>
               <div className="mt-2">
-        <input
-          name="password"
-          type="password"
-          id="pass"
-          autoComplete="current-password"
-          onChange={handleChange}
-          required
-          className="block w-full rounded-md border-0 pl-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-        />
-        </div></div>
-        <br /> <br />
-        <div>
+                <input
+                  name="password"
+                  type="password"
+                  id="pass"
+                  autoComplete="current-password"
+                  onChange={handleChange}
+                  required
+                  className="block w-full rounded-md border-0 pl-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <br /> <br />
+            <div>
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-blue-700 hover:bg-blue-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -108,18 +118,18 @@ function Register() {
                 Sign in
               </button>
             </div>
-      </form>
+          </form>
         </div>
-      <p className="mt-10 text-center text-sm text-gray-500">
-           Already signed up?{" "}
-            <a
-              href="/Login"
-              className="font-semibold leading-6 text-cyan-600 hover:text-cyan-500"
-            >
-              Sign in now
-            </a>
-          </p>
-          </div>
+        <p className="mt-10 text-center text-sm text-gray-500">
+          Already signed up?{" "}
+          <a
+            href="/Login"
+            className="font-semibold leading-6 text-cyan-600 hover:text-cyan-500"
+          >
+            Sign in now
+          </a>
+        </p>
+      </div>
     </>
   );
 }

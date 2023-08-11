@@ -10,7 +10,6 @@ router.get("/", (req, res) => {
 
     (err, rows, fields) => {
       if (err) throw err;
-      console.log(rows);
       const homes = {};
       rows.forEach((row) => {
         const {
@@ -46,8 +45,6 @@ router.get("/", (req, res) => {
           homes[idHome].urls.push(Url);
         }
       });
-
-      console.log(homes);
 
       res.send(homes);
     }

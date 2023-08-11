@@ -37,8 +37,6 @@ function Filter() {
     const result = await response.json();
 
     setSearchRes(result);
-    console.log(result);
-    console.log(searchRes);
   };
 
   return (

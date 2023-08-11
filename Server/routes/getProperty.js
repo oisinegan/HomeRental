@@ -6,18 +6,14 @@ router.post("/", (req, res) => {
   connection.connect();
 
   let info = req.body;
-  console.log(info);
 
   const sql =
-    "SELECT Home.*, Urls.*, Landlord.Name FROM Home INNER JOIN URLs ON Home.idHome = Urls.idHome INNER JOIN landlord ON Home.idLandlord = Landlord.idLandlord WHERE home.idHome = '" +
+    "SELECT Home.*, Urls.*, Landlord.Name, LandLord.username FROM Home INNER JOIN URLs ON Home.idHome = Urls.idHome INNER JOIN landlord ON Home.idLandlord = Landlord.idLandlord WHERE home.idHome = '" +
     info.id +
     "'";
 
-  console.log("SQL REQ");
-  console.log(sql);
   connection.query(sql, (err, rows, fields) => {
     if (err) throw err;
-    console.log(rows);
     const homes = {};
     rows.forEach((row) => {
       const {
@@ -32,6 +28,7 @@ router.post("/", (req, res) => {
         Bathrooms,
         DatePosted,
         Name,
+        username,
         Url,
       } = row;
       //If doesn't exist create row
@@ -47,6 +44,7 @@ router.post("/", (req, res) => {
           Bathrooms,
           DatePosted,
           Name,
+          username,
           urls: [Url],
         };
       }
@@ -55,8 +53,6 @@ router.post("/", (req, res) => {
         homes[idHome].urls.push(Url);
       }
     });
-
-    console.log(homes);
 
     res.send(homes);
   });

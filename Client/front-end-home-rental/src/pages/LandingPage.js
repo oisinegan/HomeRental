@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Nav from "../components/nav";
 import Footer from "../components/footer";
 import LandingPageImg from "../Images/LandingPageImg.jpg";
@@ -66,7 +66,6 @@ function LandingPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(search);
     if (search === "") {
       window.location.href = `/Rentals?key=${encodeURIComponent("search")}`;
     } else if (search === null) {
@@ -83,13 +82,11 @@ function LandingPage() {
     setFilterRes((prev) => {
       return { ...prev, [name]: value.trim() };
     });
-
-    console.log(filterRes);
   };
 
   const handleSubmitFilter = async (e) => {
     e.preventDefault();
-    console.log(filterRes);
+
     if (filterRes === "") {
       window.location.href = `/Rentals`;
     } else if (filterRes === null) {
@@ -116,7 +113,6 @@ function LandingPage() {
   };
 
   const resetFilter = () => {
-    console.log("clicked");
     setFilterRes(initialFilterState);
   };
 

@@ -6,7 +6,6 @@ const bycrpt = require("bcrypt");
 router.post("/", (req, res) => {
   connection.connect();
   let info = req.body;
-  console.log(info);
 
   connection.query(
     "SELECT * FROM HomeRental.Landlord WHERE username = '" +

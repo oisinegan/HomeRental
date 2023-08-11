@@ -3,14 +3,8 @@ const router = express.Router();
 const connection = require("../config/dbConfig");
 
 router.post("/", (req, res) => {
-  console.log("CALLED SEARCH HOMES");
-
   connection.connect();
   let info = req.body;
-  console.log("RECICED: ");
-  console.log(info);
-
-  console.log("SQL>>>>>>>");
   const sql =
     "SELECT Home.*, Urls.*, Landlord.Name FROM Home INNER JOIN URLs ON Home.idHome = Urls.idHome INNER JOIN landlord ON Home.idLandlord = Landlord.idLandlord WHERE Address LIKE '" +
     info.search +
@@ -20,11 +14,9 @@ router.post("/", (req, res) => {
     info.search +
     "%' ";
 
-  console.log(sql);
-
   connection.query(sql, (err, rows, fields) => {
     if (err) throw err;
-    console.log(rows);
+
     const homes = {};
     rows.forEach((row) => {
       const {
@@ -60,8 +52,6 @@ router.post("/", (req, res) => {
         homes[idHome].urls.push(Url);
       }
     });
-
-    console.log(homes);
 
     res.send(homes);
   });

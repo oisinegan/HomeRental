@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const bycrpt = require("bcrypt");
 const session = require("express-session");
 const bodyParser = require("body-parser");
+require("dotenv").config();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -65,6 +66,9 @@ app.use("/deleteProperty", deletePropertyRouter);
 
 const deleteAccountRouter = require("./routes/deleteAccount");
 app.use("/deleteAccount", deleteAccountRouter);
+
+const emailUsersRouter = require("./routes/emailUsers");
+app.use("/emailUsers", emailUsersRouter);
 
 app.post("/logout", (req, res, next) => {
   res.clearCookie("connect.sid");

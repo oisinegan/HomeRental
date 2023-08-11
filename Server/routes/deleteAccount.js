@@ -6,7 +6,6 @@ router.post("/", (req, res) => {
   connection.connect();
 
   let info = req.body;
-  console.log(info);
 
   const sql1 = "DELETE FROM Home WHERE idLandlord = " + info.id + "; ";
   const sql2 = "DELETE FROM Landlord WHERE idLandlord = " + info.id + "; ";
@@ -14,9 +13,6 @@ router.post("/", (req, res) => {
     "DELETE FROM Urls WHERE idHome IN (SELECT idHome FROM Home WHERE idLandlord = " +
     info.id +
     ");";
-  console.log(sql1);
-  console.log(sql2);
-  console.log(sql3);
 
   connection.query(sql1, (err, rows, fields) => {
     if (err) throw err;
@@ -26,7 +22,7 @@ router.post("/", (req, res) => {
 
       connection.query(sql3, (err, rows, fields) => {
         if (err) throw err;
-        console.log("SUCCESS");
+
         res.send('"SUCCESS"');
       });
     });

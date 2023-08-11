@@ -8,9 +8,9 @@ function PostAd() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploadedFilesImgURl, setUploadedFilesImgUrl] = useState([]);
   const [fileLimit, setFileLimit] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const MAX_IMAGES = 6;
 
-  const [userInfo, setUserInfo] = useState([{}]);
   const [formRes, setFormRes] = useState({
     Type: "apartment",
     City: "",
@@ -36,6 +36,7 @@ function PostAd() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     let date_ob = new Date();
     let date = ("0" + date_ob.getDate()).slice(-2);
@@ -89,7 +90,8 @@ function PostAd() {
     });
     const result = await response.json();
 
-    if (result === "RECIEVED") {
+    setIsSubmitting(false);
+    if (result === "RECEIVED") {
       window.location.href = "http://localhost:3000/MyRentals";
     } else {
       alert("ERROR POSTING AD PLEASE TRY AGAIN");
@@ -132,8 +134,8 @@ function PostAd() {
     handleUploadFiles(chosenFiles);
   };
 
-  const deleteImage = () => {
-    console.log("Deleting");
+  const deleteImage = (e) => {
+    e.preventDefault();
     setUploadedFiles([]);
     setUploadedFilesImgUrl([]);
   };
@@ -144,8 +146,6 @@ function PostAd() {
     fetch("/getUser")
       .then((res) => res.json())
       .then((userInfo) => {
-        setUserInfo(userInfo);
-
         setFormRes((prevFormRes) => ({
           ...prevFormRes,
           idLandlord: userInfo.id,
@@ -156,6 +156,7 @@ function PostAd() {
   return (
     <>
       <Nav />
+
       <h1 className="mb-12 ml-16 text-4xl font-extrabold leading-none tracking-tight text-cyan-900 md:text-4xl lg:text-5xl dark:text-white mt-8 ml-10">
         <span className=" underline-offset-3 decoration-12 decoration-black dark:decoration-blue-600">
           List Property
@@ -167,133 +168,119 @@ function PostAd() {
         onSubmit={handleSubmit}
         encType="multipart/form-data"
       >
-        <div class="mb-6">
+        <div className="mb-6">
           <label className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">
             Property Type
           </label>
           <select
             id="countries"
             onChange={handleChange}
-            class="bg-gray-50 border border-gray-300  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option value="apartment">Apartment</option>
             <option value="house">House</option>
           </select>
         </div>
 
-        <div class="mb-6">
+        <div className="mb-6">
           <label
-            for="email"
-            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+            htmlFor="email"
+            className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
           >
             Address
           </label>
           <input
             name="Address"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             type="text"
             maxLength={30}
             required
             onChange={handleChange}
           />
         </div>
-        <div class="mb-6">
+        <div className="mb-6">
           <label
-            for="email"
-            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+            htmlFor="email"
+            className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
           >
             Town
           </label>
           <input
             name="City"
             type="text"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             maxLength={30}
             required
             onChange={handleChange}
           />
         </div>
-        <div class="mb-6">
+        <div className="mb-6">
           <label
-            for="email"
-            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+            htmlFor="email"
+            className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
           >
             County
           </label>
           <input
             name="County"
             type="text"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             maxLength={30}
             required
             onChange={handleChange}
           />
         </div>
-        <div class="mb-6">
+        <div className="mb-6">
           <label
-            for="email"
-            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+            htmlFor="email"
+            className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
           >
             Price per month
           </label>
           <input
             name="Price"
             type="number"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
             onChange={handleChange}
           />
         </div>
-        <div class="mb-6">
+
+        <div className="mb-6">
           <label
-            for="email"
-            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+            htmlFor="email"
+            className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
           >
             Bed
           </label>
           <input
             name="Bedrooms"
             type="number"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
             onChange={handleChange}
           />
         </div>
-        <div class="mb-6">
+        <div className="mb-6">
           <label
-            for="email"
-            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
-          >
-            Bed
-          </label>
-          <input
-            name="Bedrooms"
-            type="number"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            required
-            onChange={handleChange}
-          />
-        </div>
-        <div class="mb-6">
-          <label
-            for="email"
-            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+            htmlFor="email"
+            className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
           >
             Bathrooms
           </label>
           <input
             name="Bathrooms"
             type="number"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
             onChange={handleChange}
           />
         </div>
 
-        <div class="mb-6">
+        <div className="mb-6">
           <label
-            for="Description"
-            class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+            htmlFor="Description"
+            className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
           >
             Description
           </label>
@@ -301,16 +288,16 @@ function PostAd() {
             name="Description"
             rows="6"
             maxLength={2000}
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
             onChange={handleChange}
           />
         </div>
 
-        <div class="mb-6 flex flex-col justify-center">
+        <div className="mb-6 flex flex-col justify-center">
           <label
-            for="images"
-            class="block mb-1 text-lg font-medium text-gray-900 dark:text-white"
+            htmlFor="images"
+            className="block mb-1 text-lg font-medium text-gray-900 dark:text-white"
           >
             {" "}
             Choose Images{" "}
@@ -337,27 +324,30 @@ function PostAd() {
             {uploadedFilesImgURl.map((file) => (
               <div>
                 <img
-                  className="h-[25em] w-full my-4 border-2 border-black"
+                  className="h-[25em] showAll-custom3:h-[20em] showAll-custom4:h-[17em] tiny-custom2:h-[15em] tiny-custom:h-[12.5em] w-full my-4 border-2 border-black"
                   alt="House rental images"
                   src={file}
                 />
               </div>
             ))}
           </div>
-          <a
+          <button
             className="font-semibold leading-6 text-cyan-600 hover:text-cyan-500"
             onClick={deleteImage}
           >
             Not Happy with your images? Click here to reset!
-          </a>
+          </button>
         </div>
 
         <div className="flex justify-center">
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium rounded-md justify-end"
+            className={`px-4 py-2 ${
+              isSubmitting ? "bg-blue-700" : "bg-blue-700 hover:bg-blue-800"
+            } text-white text-sm font-medium rounded-md justify-end`}
+            disabled={isSubmitting}
           >
-            Post Property
+            {isSubmitting ? "Submitting..." : "Post Property"}
           </button>
         </div>
       </form>

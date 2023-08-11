@@ -62,11 +62,8 @@ router.post("/", (req, res) => {
     info.Type +
     "%'";
 
-  console.log("SQL REQ");
-  console.log(sql);
   connection.query(sql, (err, rows, fields) => {
     if (err) throw err;
-    console.log(rows);
     const homes = {};
     rows.forEach((row) => {
       const {
@@ -102,8 +99,6 @@ router.post("/", (req, res) => {
         homes[idHome].urls.push(Url);
       }
     });
-
-    console.log(homes);
 
     res.send(homes);
   });

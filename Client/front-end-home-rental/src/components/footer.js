@@ -1,7 +1,3 @@
-import { Link } from "react-router-dom";
-import { myContext } from "../pages/Context";
-import { useContext } from "react";
-
 function Footer() {
   return (
     <footer className="bg-gray-100 rounded-lg mt-24  ">

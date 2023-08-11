@@ -15,6 +15,7 @@ module.exports = {
       "showAll-custom": { max: "1016px" },
       "showAll-custom2": { max: "978px" },
       "showAll-custom3": { max: "831px" },
+      "showAll-custom4": { max: "700px" },
       "tiny-custom2": { max: "530px" },
       "tiny-custom": { max: "470px" },
     },

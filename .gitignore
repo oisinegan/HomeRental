@@ -5,3 +5,4 @@ Server/houserentalimages-firebase-adminsdk-jyge2-eaaf09321a.json
 Server/node_modules/*
 Server/node_modules/@grpc/grpc-js/build/src/channel-options.js
 Client/front-end-home-rental/src/config/firebase.js
+.env
